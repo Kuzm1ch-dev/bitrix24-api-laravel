@@ -1,5 +1,5 @@
 {
-    "name": "x3group-dev/bitrix24-api-laravel",
+    "name": "Kuzm1ch-dev/bitrix24-api-laravel",
     "description": "b24 rest api",
     "type": "library",
     "license": "MIT",
@@ -9,8 +9,12 @@
             "email": "dev@x3group.ru"
         },
         {
-            "name": "MrDeff",
+            "name": "MrDeff (original Author)",
             "email": "e.pedan@gmail.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Kuzm1ch-dev",
             "role": "Developer"
         }
     ],
@@ -21,7 +25,7 @@
         }
     },
     "require": {
-        "x3group-dev/bitrix24-api": "^1.2.5"
+        "Kuzm1ch-dev/bitrix24-api": "^1.2.5"
     },
     "extra": {
         "laravel": {
