@@ -1,5 +1,5 @@
 {
-    "name": "Kuzm1ch-dev/bitrix24-api-laravel",
+    "name": "kuzm1ch-dev/bitrix24-api-laravel",
     "description": "b24 rest api",
     "type": "library",
     "license": "MIT",
