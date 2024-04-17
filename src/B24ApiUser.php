@@ -23,9 +23,9 @@ class B24ApiUser extends B24Api
 
     protected function getSettings(): array
     {
-        $dataBitrix24 = B24Api\Models\B24Api::where('member_id', $this->memberId)->first();
+        $dataBitrix24 = \B24Api\Models\B24Api::where('member_id', $this->memberId)->first();
         if ($dataBitrix24) {
-            $data = B24Api\Models\B24User::where('member_id', $this->memberId)->where('user_id', $this->b24UserId)->first();
+            $data = \B24Api\Models\B24User::where('member_id', $this->memberId)->where('user_id', $this->b24UserId)->first();
             if ($data) {
                 return array_merge($dataBitrix24->toArray(), $data->toArray());
             }
@@ -43,7 +43,7 @@ class B24ApiUser extends B24Api
         if (env('APP_DEBUG'))
             return;
 
-        $dataApiB24 = B24Api\Models\B24User::where('expires', '<=', time() - (20 * 3600 * 24))->orWhere('expires', null)->get();
+        $dataApiB24 = \B24Api\Models\B24User::where('expires', '<=', time() - (20 * 3600 * 24))->orWhere('expires', null)->get();
         foreach ($dataApiB24 as $b24) {
             $api = (new self($b24->member_id, $b24->user_id));
             $b24Api = $api->getApi();
@@ -80,7 +80,7 @@ class B24ApiUser extends B24Api
                 'application_token' => ''
             ]);
             try {
-                B24Api\Models\B24User::updateOrCreate(
+                \B24Api\Models\B24User::updateOrCreate(
                     ['member_id' => $this->memberId, 'user_id' => $this->b24UserId],
                     $updateFields
                 );

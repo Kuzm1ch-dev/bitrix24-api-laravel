@@ -4,7 +4,7 @@ namespace B24Api\Http\Controllers;
 
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Log;
-use B24Api\B24Api;
+use \B24Api\B24Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 

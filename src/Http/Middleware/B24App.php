@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use B24Api\B24ApiUser;
-use B24Api\Models\B24User;
+use \B24Api\B24ApiUser;
+use \B24Api\Models\B24User;
 
 class B24App
 {

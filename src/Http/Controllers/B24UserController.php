@@ -7,8 +7,8 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Log;
-use B24Api\B24Api;
-use B24Api\B24ApiUser;
+use \B24Api\B24Api;
+use \B24Api\B24ApiUser;
 use Illuminate\Http\Request;
 
 class B24UserController extends B24Controller

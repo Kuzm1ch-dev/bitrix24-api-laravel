@@ -7,7 +7,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
-use B24Api\Classes\QueryStatMonth;
+use \B24Api\Classes\QueryStatMonth;
 
 class B24Controller extends Controller
 {
