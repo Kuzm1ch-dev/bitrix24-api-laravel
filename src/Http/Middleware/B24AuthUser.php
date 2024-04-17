@@ -1,12 +1,12 @@
 <?php
 
-namespace X3Group\B24Api\Http\Middleware;
+namespace B24Api\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use X3Group\B24Api\B24ApiUserRequest;
-use X3Group\B24Api\Models\B24User;
+use B24Api\B24ApiUserRequest;
+use B24Api\Models\B24User;
 
 class B24AuthUser
 {

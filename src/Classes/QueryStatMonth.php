@@ -1,6 +1,6 @@
 <?php
 
-namespace X3Group\B24Api\Classes;
+namespace B24Api\Classes;
 
 use Illuminate\Support\Facades\DB;
 

@@ -5,10 +5,6 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "x3Group",
-            "email": "dev@x3group.ru"
-        },
-        {
             "name": "MrDeff (original Author)",
             "email": "e.pedan@gmail.com",
             "role": "Developer"
@@ -21,16 +17,16 @@
     "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
-            "X3Group\\B24Api\\": "src"
+            "B24Api\\": "src"
         }
     },
     "require": {
-        "Kuzm1ch-dev/bitrix24-api": "^1.2.5"
+        "kuzm1ch-dev/bitrix24-api": "^1.0.1"
     },
     "extra": {
         "laravel": {
             "providers": [
-                "X3Group\\B24Api\\Providers\\B24ApiServiceProvider"
+                "B24Api\\Providers\\B24ApiServiceProvider"
             ]
         }
     },

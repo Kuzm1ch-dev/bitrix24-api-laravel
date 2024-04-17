@@ -1,17 +1,17 @@
 <?php
 
-namespace X3Group\B24Api\Providers;
+namespace B24Api\Providers;
 
-use X3Group\B24Api\B24Api;
-use X3Group\B24Api\B24ApiUser;
-use X3Group\B24Api\Http\Middleware\B24App;
-use X3Group\B24Api\Http\Middleware\B24AppUser;
-use X3Group\B24Api\Http\Middleware\B24AuthApi;
+use B24Api\B24Api;
+use B24Api\B24ApiUser;
+use B24Api\Http\Middleware\B24App;
+use B24Api\Http\Middleware\B24AppUser;
+use B24Api\Http\Middleware\B24AuthApi;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Routing\Router;
-use X3Group\B24Api\Http\Middleware\B24AuthUser;
+use B24Api\Http\Middleware\B24AuthUser;
 
 class B24ApiServiceProvider extends ServiceProvider
 {
@@ -105,7 +105,7 @@ class B24ApiServiceProvider extends ServiceProvider
 
         $application->make('config')->set('auth.providers.b24user', [
             'driver' => 'eloquent',
-            'model' => \X3Group\B24Api\Models\B24User::class,
+            'model' => B24Api\Models\B24User::class,
         ]);
 
         $application->make('config')->set('app.timezone', 'Europe/Moscow');

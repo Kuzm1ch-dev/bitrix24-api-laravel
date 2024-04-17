@@ -1,6 +1,6 @@
 <?php
 
-namespace X3Group\B24Api\Models;
+namespace B24Api\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

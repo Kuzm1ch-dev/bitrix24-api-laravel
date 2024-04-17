@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace X3Group\B24Api;
+namespace B24Api;
 
 use Bitrix24Api\ApiClient;
 use Bitrix24Api\Config\Credential;
@@ -128,7 +128,7 @@ class B24Api
         if (env('APP_DEBUG'))
             return;
 
-        $dataApiB24 = \X3Group\B24Api\Models\B24Api::where('expires', '<=', time() - (20 * 3600 * 24))->get();
+        $dataApiB24 = B24Api\Models\B24Api::where('expires', '<=', time() - (20 * 3600 * 24))->get();
         foreach ($dataApiB24 as $b24) {
             $api = (new self($b24->member_id));
             $b24Api = $api->getApi();
@@ -146,7 +146,7 @@ class B24Api
      */
     public static function checkStatus(): void
     {
-        $model = new \X3Group\B24Api\Models\B24Api;
+        $model = new B24Api\Models\B24Api;
         $dataApiB24 = $model->get();
         foreach ($dataApiB24 as $b24) {
             $api = (new self($b24->member_id));
@@ -194,7 +194,7 @@ class B24Api
             ]);
 
             try {
-                \X3Group\B24Api\Models\B24Api::updateOrCreate(
+                B24Api\Models\B24Api::updateOrCreate(
                     ['member_id' => $this->memberId],
                     $updateFields
                 );
@@ -217,7 +217,7 @@ class B24Api
     {
         if (is_array($settings)) {
             $oldData = [];
-            $dataObject = \X3Group\B24Api\Models\B24Api::where('member_id', $memberId)->first();
+            $dataObject = B24Api\Models\B24Api::where('member_id', $memberId)->first();
             if ($dataObject)
                 $oldData = $dataObject->toArray();
 
@@ -243,7 +243,7 @@ class B24Api
             ]);
 
             try {
-                \X3Group\B24Api\Models\B24Api::updateOrCreate(
+                B24Api\Models\B24Api::updateOrCreate(
                     ['member_id' => $memberId],
                     $updateFields
                 );
@@ -263,7 +263,7 @@ class B24Api
      */
     protected function getSettings(): array
     {
-        $data = \X3Group\B24Api\Models\B24Api::where('member_id', $this->memberId)->first();
+        $data = B24Api\Models\B24Api::where('member_id', $this->memberId)->first();
         if ($data)
             return $data->toArray();
 

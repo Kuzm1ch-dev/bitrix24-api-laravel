@@ -1,6 +1,6 @@
 <?php
 
-namespace X3Group\B24Api;
+namespace B24Api;
 
 use Bitrix24Api\Config\Credential;
 use Illuminate\Support\Facades\Log;

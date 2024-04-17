@@ -1,6 +1,6 @@
 <?php
 
-namespace X3Group\B24Api\Http\Middleware;
+namespace B24Api\Http\Middleware;
 
 use Illuminate\Http\Request;
 

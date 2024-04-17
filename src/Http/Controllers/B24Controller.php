@@ -1,13 +1,13 @@
 <?php
 
-namespace X3Group\B24Api\Http\Controllers;
+namespace B24Api\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
-use X3Group\B24Api\Classes\QueryStatMonth;
+use B24Api\Classes\QueryStatMonth;
 
 class B24Controller extends Controller
 {
