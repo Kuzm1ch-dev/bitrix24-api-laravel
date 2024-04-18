@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use \B24Api\B24ApiUserRequest;
 use \B24Api\Models\B24User;
+use Illuminate\Support\Facades\Auth;
 
 class B24AppUser
 {
@@ -18,16 +19,15 @@ class B24AppUser
             return response()->json(['error' => 'memberId is null'], 406);
         }
         $reLogin = false;
-        if (!auth()->check()) {
+        if (!Auth::check()) {
             $reLogin = true;
-        } elseif ((auth()->user()->getMemberId() != $memberId)) {
+        } elseif ((Auth::user()->getMemberId() != $memberId)) {
             $reLogin = true;
         } else {
-            if (is_null(auth()->user()->expires) || time() >= auth()->user()->expires) {
+            if (is_null(Auth::user()->expires) || time() >= Auth::user()->expires) {
                 $reLogin = true;
             }
         }
-
         if ($reLogin) {
             if (!$request->post('AUTH_ID'))
                 return response()->json(['error' => 'AUTH_ID is null'], 406);
@@ -44,7 +44,7 @@ class B24AppUser
                                 'application_token' => $request->get('APP_SID'),
                                 'domain' => $request->get('DOMAIN'),
                                 'is_admin' => $profile['ADMIN'],
-                                'expires' => time() + (int)$request->post('AUTH_EXPIRES') - 600,
+                                'expires' => time() + (int) $request->post('AUTH_EXPIRES') - 600,
                             ]
                         );
                     } else {
@@ -57,7 +57,7 @@ class B24AppUser
                             'application_token' => $request->get('APP_SID'),
                             'domain' => $request->get('DOMAIN'),
                             'is_admin' => $profile['ADMIN'],
-                            'expires' => time() + (int)$request->post('AUTH_EXPIRES') - 600,
+                            'expires' => time() + (int) $request->post('AUTH_EXPIRES') - 600,
                         ];
 
                         $user = new B24User;
@@ -65,8 +65,8 @@ class B24AppUser
                         $user->save();
                         $userFind = B24User::find($user->id);
                     }
-                    auth()->login($userFind);
-                    if (!auth()->check()) {
+                    Auth::login($userFind);
+                    if (!Auth::check()) {
                         return response()->json(['error' => 'Unauthorized, auth failed'], 401);
                     }
                 } else {

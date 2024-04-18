@@ -8,6 +8,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use \B24Api\Classes\QueryStatMonth;
+use Illuminate\Support\Facades\Auth;
 
 class B24Controller extends Controller
 {
@@ -22,7 +23,10 @@ class B24Controller extends Controller
         if ($request->has('event_token')) {
             $this->eventToken = $request->post('event_token');
         }
-
+		if(Auth::check() || (Auth::user())){
+			$this->userId = Auth::user()->user_id;
+		}
+		
         if ($request->has('user_id') && $request->post('user_id')) {
             $this->userId = $request->post('user_id');
         }
