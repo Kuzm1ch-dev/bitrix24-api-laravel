@@ -12,17 +12,17 @@ class B24AuthUser
 {
     public function handle(Request $request, \Closure $next)
     {
-        $memberId = $request->header('X-b24api-member-id');
+        $memberId = $request->header('x-b24-member-id');
         if (empty($memberId)) {
             return response()->json(['error' => 'memberId is null'], 406);
         }
 
-        $domain = $request->header('X-b24api-domain');
+        $domain = $request->header('x-b24-domain');
         if (empty($domain)) {
             return response()->json(['error' => 'domain is null'], 406);
         }
 
-        $accessToken = $request->header('X-b24api-access-token');
+        $accessToken = $request->header('x-b24-access-token');
         if (empty($accessToken)) {
             return response()->json(['error' => 'access token is null'], 406);
         }

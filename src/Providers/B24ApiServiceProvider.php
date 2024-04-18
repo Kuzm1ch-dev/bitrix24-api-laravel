@@ -65,7 +65,7 @@ class B24ApiServiceProvider extends ServiceProvider
         ]);
 
         /**
-         * Запросы из фронта приложения с передачей авторизации через header X-b24api-access-token X-b24api-domain X-b24api-member-id
+         * Запросы из фронта приложения с передачей авторизации через header x-b24-access-token x-b24-domain x-b24-member-id
          * авторизует пользователя и делает запрос от него
          */
         $router->middlewareGroup('b24appFrontRequest', [

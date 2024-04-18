@@ -30,15 +30,14 @@ class B24Controller extends Controller
         if ($request->has('user_id') && $request->post('user_id')) {
             $this->userId = $request->post('user_id');
         }
-
         if ($request->has('member_id') && $request->post('member_id')) {
             $this->memberId = $request->post('member_id');
         } elseif ($request->has('auth') && $request->post('auth')['member_id']) {
             $this->memberId = $request->post('auth')['member_id'];
         } elseif ($request->has('auth') && $request->json('auth')['member_id']) {
             $this->memberId = $request->json('auth')['member_id'];
-        } elseif ($request->hasHeader('X-b24-Member-Id') && $request->header('X-b24-Member-Id')) {
-            $this->memberId = $request->header('X-b24-Member-Id');
+        } elseif ($request->hasHeader('x-b24-member-id') && $request->header('x-b24-member-id')) {
+            $this->memberId = $request->header('x-b24-Member-id');
         } else {
             throw new \Exception('memberId is null');
         }
