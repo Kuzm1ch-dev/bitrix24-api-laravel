@@ -53,10 +53,10 @@ class B24Controller extends Controller
         return $this->eventToken;
     }
 
-    public function index(Request $request): \Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
-    {
-        return view('b24api/index', []);
-    }
+    // public function index(Request $request): \Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
+    // {
+    //     return view('b24api/index', []);
+    // }
 
     /**
      * @return array|mixed|string|null
