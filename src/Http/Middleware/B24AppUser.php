@@ -14,34 +14,37 @@ class B24AppUser
 {
     public function handle(Request $request, \Closure $next)
     {
-        $memberId = $request->post('member_id');
-        if (empty($memberId)) {
-            return response()->json(['error' => 'memberId is null'], 406);
-        }
+        $memberId = $request->post('member_id') ?? $request->get('member_id');
         $reLogin = false;
         if (!Auth::check()) {
             $reLogin = true;
-        } elseif ((Auth::user()->getMemberId() != $memberId)) {
-            $reLogin = true;
+        } elseif (Auth::user()->getMemberId()) {
+			$memberId = Auth::user()->getMemberId();
+            //$reLogin = true;
         } else {
             if (is_null(Auth::user()->expires) || time() >= Auth::user()->expires) {
                 $reLogin = true;
             }
         }
         if ($reLogin) {
-            if (!$request->post('AUTH_ID'))
+            if (!$request->post('AUTH_ID') && !$request->get('AUTH_ID'))
                 return response()->json(['error' => 'AUTH_ID is null'], 406);
-
+			if (empty($memberId)) {
+				return response()->json(['error' => 'memberId is null'], 406);
+			}
             try {
-                $api = new B24ApiUserRequest($memberId, $request->post('AUTH_ID'), $request->post('REFRESH_ID'), $request->get('APP_SID'));
+				$AUTH_ID = $request->post('AUTH_ID') ?? $request->get('AUTH_ID');
+				$REFRESH_ID =  $request->post('REFRESH_ID') || $request->get('REFRESH_ID');
+				$APP_SID = $request->get('APP_SID');
+                $api = new B24ApiUserRequest($memberId, $AUTH_ID, $REFRESH_ID, $APP_SID);
                 if ($profile = $api->getProfile()) {
                     $userFind = B24User::where('user_id', $profile['ID'])->where('member_id', $request->post('member_id'))->first();
                     if ($userFind) {
                         $userFind->update(
                             [
-                                'access_token' => $request->post('AUTH_ID'),
-                                'refresh_token' => $request->post('REFRESH_ID'),
-                                'application_token' => $request->get('APP_SID'),
+                                'access_token' => $AUTH_ID,
+                                'refresh_token' => $REFRESH_ID,
+                                'application_token' => $APP_SID,
                                 'domain' => $request->get('DOMAIN'),
                                 'is_admin' => $profile['ADMIN'],
                                 'expires' => time() + (int) $request->post('AUTH_EXPIRES') - 600,
