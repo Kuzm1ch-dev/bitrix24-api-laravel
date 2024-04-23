@@ -23,7 +23,8 @@ class B24Controller extends Controller
         if ($request->has('event_token')) {
             $this->eventToken = $request->post('event_token');
         }
-		if(Auth::check() || (Auth::user())){
+		
+		if(Auth::check() || Auth::user()){
 			$this->userId = Auth::user()->user_id;
 		}
 		
@@ -38,9 +39,11 @@ class B24Controller extends Controller
             $this->memberId = $request->json('auth')['member_id'];
         } elseif ($request->hasHeader('x-b24-member-id') && $request->header('x-b24-member-id')) {
             $this->memberId = $request->header('x-b24-Member-id');
-        } else {
-            throw new \Exception('memberId is null');
-        }
+        } else if (Auth::check() || Auth::user()){
+			$this->memberId = Auth::user()->getMemberId();
+        }else{
+			throw new \Exception('memberId is null');
+		}
 
         if ($this->memberId) {
             QueryStatMonth::add($this->memberId);

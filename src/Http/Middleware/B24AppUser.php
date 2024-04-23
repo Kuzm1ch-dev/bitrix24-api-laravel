@@ -18,14 +18,13 @@ class B24AppUser
         $reLogin = false;
         if (!Auth::check()) {
             $reLogin = true;
-        } elseif (Auth::user()->getMemberId()) {
-			$memberId = Auth::user()->getMemberId();
-            //$reLogin = true;
-        } else {
-            if (is_null(Auth::user()->expires) || time() >= Auth::user()->expires) {
-                $reLogin = true;
-            }
+        } else if(is_null(Auth::user()->expires) || time() >= Auth::user()->expires) {
+			$reLogin = true;
         }
+		if (Auth::check() && Auth::user() && Auth::user()->getMemberId()){
+			$memberId = Auth::user()->getMemberId();
+		}
+		error_log($reLogin ? "yes" : "no");
         if ($reLogin) {
             if (!$request->post('AUTH_ID') && !$request->get('AUTH_ID'))
                 return response()->json(['error' => 'AUTH_ID is null'], 406);
