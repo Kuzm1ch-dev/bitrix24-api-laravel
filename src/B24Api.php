@@ -118,6 +118,12 @@ class B24Api
         ];
     }
 
+    public function total(string $apiMethod, array $parameters = []): int
+    {
+        $response = $this->getApi()->request($apiMethod, $parameters)->getResponseData();
+        return $response->getPagination()->getTotal();
+    }
+
     /**
      * artisan schedule:work
      * продляет токены через 20 дней, если не было активности от портала
