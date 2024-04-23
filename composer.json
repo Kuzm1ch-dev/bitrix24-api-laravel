@@ -21,7 +21,7 @@
         }
     },
     "require": {
-        "kuzm1ch-dev/bitrix24-api": "^1.0.1"
+        "kuzm1ch-dev/bitrix24-api": "1.0.*"
     },
     "extra": {
         "laravel": {
