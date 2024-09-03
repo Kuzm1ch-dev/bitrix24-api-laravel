@@ -26,6 +26,9 @@ class B24Controller extends Controller
         if ($request->has('user_id') && $request->post('user_id')) {
             $this->userId = $request->post('user_id');
         }
+        if(auth()){
+            $this->userId = auth()->user()->user_id;
+        }
 
         if ($request->has('member_id') && $request->post('member_id')) {
             $this->memberId = $request->post('member_id');
