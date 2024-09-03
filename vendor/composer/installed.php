@@ -3,7 +3,7 @@
         'name' => 'kuzm1ch-dev/bitrix24-api-laravel',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '00efd0847cf6a3fe25b2c71186ef5ce8b5fa0e7f',
+        'reference' => '90a89855cab7a1c8e6a13e95ff2fa7e8b4182053',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -22,7 +22,7 @@
         'kuzm1ch-dev/bitrix24-api-laravel' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '00efd0847cf6a3fe25b2c71186ef5ce8b5fa0e7f',
+            'reference' => '90a89855cab7a1c8e6a13e95ff2fa7e8b4182053',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
