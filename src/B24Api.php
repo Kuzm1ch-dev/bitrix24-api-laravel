@@ -7,11 +7,13 @@ use Bitrix24Api\ApiClient;
 use Bitrix24Api\Config\Credential;
 use Bitrix24Api\Exceptions\ApiException;
 use Bitrix24Api\Exceptions\ApplicationNotInstalled;
+use Bitrix24Api\Exceptions\ExpiredRefreshToken;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use JetBrains\PhpStorm\ArrayShape;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
+use B24Api\Models\B24User;
 
 /**
  * Основной класс обертка для общения с б24
@@ -118,12 +120,6 @@ class B24Api
         ];
     }
 
-    public function total(string $apiMethod, array $parameters = []): int
-    {
-        $response = $this->getApi()->request($apiMethod, $parameters)->getResponseData();
-        return $response->getPagination()->getTotal();
-    }
-
     /**
      * artisan schedule:work
      * продляет токены через 20 дней, если не было активности от портала
@@ -134,14 +130,29 @@ class B24Api
         if (env('APP_DEBUG'))
             return;
 
-        $dataApiB24 = \B24Api\Models\B24Api::where('expires', '<=', time() - (20 * 3600 * 24))->get();
+        $dataApiB24 = \B24Api\Models\B24Api::query()
+            ->where('expires', '<=', time() - (20 * 3600 * 24))
+            ->where('error_update', '<', 10)
+            ->get();
+
         foreach ($dataApiB24 as $b24) {
             $api = (new self($b24->member_id));
             $b24Api = $api->getApi();
             $b24Api->onAccessTokenRefresh(function (Credential $credential) use ($api) {
                 $api->saveMemberData($credential->toArray());
             });
-            $b24Api->getNewAccessToken();
+            try {
+                $b24Api->getNewAccessToken();
+            } catch (ExpiredRefreshToken $e) {
+                $b24->error_update++;
+                $b24->save();
+
+                Log::error('Expired refresh token: ' . $e->getMessage(), [
+                    'portal' => $b24->client_endpoint,
+                    'user' => $b24->user_id,
+                    'member_id' => $b24->member_id,
+                ]);
+            }
         }
     }
 
@@ -161,6 +172,7 @@ class B24Api
                 $appInfo = $b24Api->request('app.info');
             } catch (ApplicationNotInstalled $exception) {
                 //todo: remove delaytasks
+                B24User::query()->where('member_id', $b24->member_id)->delete();
                 $b24->delete();
             } catch (ApiException $e) {
 
@@ -198,7 +210,7 @@ class B24Api
                 'scope' => '',
                 'application_token' => ''
             ]);
-
+            $updateFields['error_update'] = 0;
             try {
                 \B24Api\Models\B24Api::updateOrCreate(
                     ['member_id' => $this->memberId],

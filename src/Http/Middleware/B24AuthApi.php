@@ -8,7 +8,7 @@ class B24AuthApi
 {
     public function handle(Request $request, \Closure $next)
     {
-        $memberId = $request->header('x-b24-member-id');
+        $memberId = $request->header('X-b24-Member-Id');
         if (empty($memberId)) {
             return response()->json(['error' => 'memberId is null'], 406);
         }

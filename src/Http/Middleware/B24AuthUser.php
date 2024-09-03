@@ -5,24 +5,24 @@ namespace B24Api\Http\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use \B24Api\B24ApiUserRequest;
-use \B24Api\Models\B24User;
+use B24Api\B24ApiUserRequest;
+use B24Api\Models\B24User;
 
 class B24AuthUser
 {
     public function handle(Request $request, \Closure $next)
     {
-        $memberId = $request->header('x-b24-member-id');
+        $memberId = $request->header('X-b24api-member-id');
         if (empty($memberId)) {
             return response()->json(['error' => 'memberId is null'], 406);
         }
 
-        $domain = $request->header('x-b24-domain');
+        $domain = $request->header('X-b24api-domain');
         if (empty($domain)) {
             return response()->json(['error' => 'domain is null'], 406);
         }
 
-        $accessToken = $request->header('x-b24-access-token');
+        $accessToken = $request->header('X-b24api-access-token');
         if (empty($accessToken)) {
             return response()->json(['error' => 'access token is null'], 406);
         }
@@ -37,7 +37,8 @@ class B24AuthUser
                         $userFind->update(
                             [
                                 'access_token' => $accessToken,
-                                'is_admin' => $profile['ADMIN']
+                                'is_admin' => $profile['ADMIN'],
+                                'error_update' => 0,
                             ]
                         );
                     } else {

@@ -2,16 +2,17 @@
 
 namespace B24Api\Providers;
 
-use \B24Api\B24Api;
-use \B24Api\B24ApiUser;
-use \B24Api\Http\Middleware\B24App;
-use \B24Api\Http\Middleware\B24AppUser;
-use \B24Api\Http\Middleware\B24AuthApi;
+use Bitrix24Api\ApiClient;
+use B24Api\B24Api;
+use B24Api\B24ApiUser;
+use B24Api\Http\Middleware\B24App;
+use B24Api\Http\Middleware\B24AppUser;
+use B24Api\Http\Middleware\B24AuthApi;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Routing\Router;
-use \B24Api\Http\Middleware\B24AuthUser;
+use B24Api\Http\Middleware\B24AuthUser;
 
 class B24ApiServiceProvider extends ServiceProvider
 {
@@ -24,7 +25,7 @@ class B24ApiServiceProvider extends ServiceProvider
          * Защита для приложений типа: использует только API
          */
         $router->middlewareGroup('b24app', [
-            \Illuminate\Cookie\Middleware\EncryptCookies::class,
+            \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
@@ -39,7 +40,7 @@ class B24ApiServiceProvider extends ServiceProvider
          * Для приложений с интерфейсом
          */
         $router->middlewareGroup('b24appUser', [
-            \Illuminate\Cookie\Middleware\EncryptCookies::class,
+            \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
@@ -55,7 +56,7 @@ class B24ApiServiceProvider extends ServiceProvider
          */
 
         $router->middlewareGroup('b24appUserApiCall', [
-            \Illuminate\Cookie\Middleware\EncryptCookies::class,
+            \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
@@ -65,11 +66,11 @@ class B24ApiServiceProvider extends ServiceProvider
         ]);
 
         /**
-         * Запросы из фронта приложения с передачей авторизации через header x-b24-access-token x-b24-domain x-b24-member-id
+         * Запросы из фронта приложения с передачей авторизации через header X-b24api-access-token X-b24api-domain X-b24api-member-id
          * авторизует пользователя и делает запрос от него
          */
         $router->middlewareGroup('b24appFrontRequest', [
-            \Illuminate\Cookie\Middleware\EncryptCookies::class,
+            \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
@@ -137,5 +138,18 @@ class B24ApiServiceProvider extends ServiceProvider
         ],'routes');
 
         $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
+    }
+
+    public function register(): void
+    {
+        $this->app->bind(ApiClient::class, function () {
+            if (auth()->user()) {
+                $memberId = auth()->user()->getMemberId();
+            } else {
+                $memberId = request()->input('auth')['member_id'];
+            }
+
+            return (new B24Api($memberId))->getApi();
+        });
     }
 }

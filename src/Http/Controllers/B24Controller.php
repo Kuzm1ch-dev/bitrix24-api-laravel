@@ -7,8 +7,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
-use \B24Api\Classes\QueryStatMonth;
-use Illuminate\Support\Facades\Auth;
+use B24Api\Classes\QueryStatMonth;
 
 class B24Controller extends Controller
 {
@@ -23,27 +22,22 @@ class B24Controller extends Controller
         if ($request->has('event_token')) {
             $this->eventToken = $request->post('event_token');
         }
-		
-		if(Auth::check() || Auth::user()){
-			$this->userId = Auth::user()->user_id;
-		}
-		
+
         if ($request->has('user_id') && $request->post('user_id')) {
             $this->userId = $request->post('user_id');
         }
+
         if ($request->has('member_id') && $request->post('member_id')) {
             $this->memberId = $request->post('member_id');
         } elseif ($request->has('auth') && $request->post('auth')['member_id']) {
             $this->memberId = $request->post('auth')['member_id'];
         } elseif ($request->has('auth') && $request->json('auth')['member_id']) {
             $this->memberId = $request->json('auth')['member_id'];
-        } elseif ($request->hasHeader('x-b24-member-id') && $request->header('x-b24-member-id')) {
-            $this->memberId = $request->header('x-b24-Member-id');
-        } else if (Auth::check() || Auth::user()){
-			$this->memberId = Auth::user()->getMemberId();
-        }else{
-			throw new \Exception('memberId is null');
-		}
+        } elseif ($request->hasHeader('X-b24-Member-Id') && $request->header('X-b24-Member-Id')) {
+            $this->memberId = $request->header('X-b24-Member-Id');
+        } else {
+            throw new \Exception('memberId is null');
+        }
 
         if ($this->memberId) {
             QueryStatMonth::add($this->memberId);
@@ -55,10 +49,10 @@ class B24Controller extends Controller
         return $this->eventToken;
     }
 
-    // public function index(Request $request): \Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
-    // {
-    //     return view('b24api/index', []);
-    // }
+    public function index(Request $request): \Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
+    {
+        return view('b24api/index', []);
+    }
 
     /**
      * @return array|mixed|string|null

@@ -6,47 +6,46 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use \B24Api\B24ApiUserRequest;
-use \B24Api\Models\B24User;
-use Illuminate\Support\Facades\Auth;
+use B24Api\B24ApiUserRequest;
+use B24Api\Models\B24User;
 
 class B24AppUser
 {
     public function handle(Request $request, \Closure $next)
     {
-        $memberId = $request->post('member_id') ?? $request->get('member_id');
-        $reLogin = false;
-        if (!Auth::check()) {
-            $reLogin = true;
-        } else if(is_null(Auth::user()->expires) || time() >= Auth::user()->expires) {
-			$reLogin = true;
+        $memberId = $request->post('member_id');
+        if (empty($memberId)) {
+            return response()->json(['error' => 'memberId is null'], 406);
         }
-		if (Auth::check() && Auth::user() && Auth::user()->getMemberId()){
-			$memberId = Auth::user()->getMemberId();
-		}
-		error_log($reLogin ? "yes" : "no");
+        $reLogin = false;
+        if (!auth()->check()) {
+            $reLogin = true;
+        } elseif ((auth()->user()->getMemberId() != $memberId)) {
+            $reLogin = true;
+        } else {
+            if (is_null(auth()->user()->expires) || time() >= auth()->user()->expires) {
+                $reLogin = true;
+            }
+        }
+
         if ($reLogin) {
-            if (!$request->post('AUTH_ID') && !$request->get('AUTH_ID'))
+            if (!$request->post('AUTH_ID'))
                 return response()->json(['error' => 'AUTH_ID is null'], 406);
-			if (empty($memberId)) {
-				return response()->json(['error' => 'memberId is null'], 406);
-			}
+
             try {
-				$AUTH_ID = $request->post('AUTH_ID') ?? $request->get('AUTH_ID');
-				$REFRESH_ID =  $request->post('REFRESH_ID') || $request->get('REFRESH_ID');
-				$APP_SID = $request->get('APP_SID');
-                $api = new B24ApiUserRequest($memberId, $AUTH_ID, $REFRESH_ID, $APP_SID);
+                $api = new B24ApiUserRequest($memberId, $request->post('AUTH_ID'), $request->post('REFRESH_ID'), $request->get('APP_SID'));
                 if ($profile = $api->getProfile()) {
                     $userFind = B24User::where('user_id', $profile['ID'])->where('member_id', $request->post('member_id'))->first();
                     if ($userFind) {
                         $userFind->update(
                             [
-                                'access_token' => $AUTH_ID,
-                                'refresh_token' => $REFRESH_ID,
-                                'application_token' => $APP_SID,
+                                'access_token' => $request->post('AUTH_ID'),
+                                'refresh_token' => $request->post('REFRESH_ID'),
+                                'application_token' => $request->get('APP_SID'),
                                 'domain' => $request->get('DOMAIN'),
                                 'is_admin' => $profile['ADMIN'],
-                                'expires' => time() + (int) $request->post('AUTH_EXPIRES') - 600,
+                                'expires' => time() + (int)$request->post('AUTH_EXPIRES') - 600,
+                                'error_update' => 0,
                             ]
                         );
                     } else {
@@ -59,7 +58,7 @@ class B24AppUser
                             'application_token' => $request->get('APP_SID'),
                             'domain' => $request->get('DOMAIN'),
                             'is_admin' => $profile['ADMIN'],
-                            'expires' => time() + (int) $request->post('AUTH_EXPIRES') - 600,
+                            'expires' => time() + (int)$request->post('AUTH_EXPIRES') - 600,
                         ];
 
                         $user = new B24User;
@@ -67,8 +66,8 @@ class B24AppUser
                         $user->save();
                         $userFind = B24User::find($user->id);
                     }
-                    Auth::login($userFind);
-                    if (!Auth::check()) {
+                    auth()->login($userFind);
+                    if (!auth()->check()) {
                         return response()->json(['error' => 'Unauthorized, auth failed'], 401);
                     }
                 } else {
