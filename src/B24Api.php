@@ -88,7 +88,7 @@ class B24Api
                 'access_token' => htmlspecialchars($request->post('AUTH_ID')),
                 'refresh_token' => htmlspecialchars($request->post('REFRESH_ID')),
                 'client_endpoint' => 'https://' . htmlspecialchars($request->get('DOMAIN')) . '/rest/',
-                'code' => htmlspecialchars($request->get('DOMAIN')),
+                'code' => htmlspecialchars($request->get('code')),
                 'member_id' => $memberId,
                 'domain' => htmlspecialchars($request->get('DOMAIN')),
 
