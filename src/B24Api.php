@@ -92,7 +92,7 @@ class B24Api
                 'member_id' => $memberId,
                 'domain' => htmlspecialchars($request->get('DOMAIN')),
 
-                'expires' => time() + (int) $request->post('AUTH_EXPIRES') - 600,
+                'expires' => time() + (int)$request->post('AUTH_EXPIRES') - 600,
                 'expires_in' => htmlspecialchars($request->post('AUTH_EXPIRES')),
 
                 'status' => htmlspecialchars($request->post('status')),
@@ -208,7 +208,8 @@ class B24Api
                 'user_id' => '',
                 'status' => '',
                 'scope' => '',
-                'application_token' => ''
+                'application_token' => '',
+                'code' => '',
             ]);
             $updateFields['error_update'] = 0;
             try {
@@ -219,7 +220,7 @@ class B24Api
 
                 return true;
             } catch (\Exception $exception) {
-                Log::error((string) $exception);
+                Log::error((string)$exception);
                 return false;
             }
         }
@@ -250,14 +251,15 @@ class B24Api
 
                 'domain' => '',
                 'member_id' => '',
-                'code' => '',
+
                 'expires' => '',
                 'expires_in' => '',
 
                 'user_id' => '',
                 'status' => '',
                 'scope' => '',
-                'application_token' => ''
+                'application_token' => '',
+                'code' => ''
             ]);
 
             try {
@@ -268,7 +270,7 @@ class B24Api
 
                 return true;
             } catch (\Exception $exception) {
-                Log::error((string) $exception);
+                Log::error((string)$exception);
                 return false;
             }
         }
