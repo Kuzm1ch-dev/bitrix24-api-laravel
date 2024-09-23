@@ -17,12 +17,10 @@ class B24Api extends Model
         'member_id',
         'expires',
         'expires_in',
-        'code',
         'user_id',
         'status',
         'scope',
         'application_token',
-
         'error_update',
     ];
 }

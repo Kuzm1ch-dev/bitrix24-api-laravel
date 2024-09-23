@@ -88,7 +88,6 @@ class B24Api
                 'access_token' => htmlspecialchars($request->post('AUTH_ID')),
                 'refresh_token' => htmlspecialchars($request->post('REFRESH_ID')),
                 'client_endpoint' => 'https://' . htmlspecialchars($request->get('DOMAIN')) . '/rest/',
-                'code' => htmlspecialchars($request->get('code')),
                 'member_id' => $memberId,
                 'domain' => htmlspecialchars($request->get('DOMAIN')),
 
@@ -209,7 +208,6 @@ class B24Api
                 'status' => '',
                 'scope' => '',
                 'application_token' => '',
-                'code' => '',
             ]);
             $updateFields['error_update'] = 0;
             try {
@@ -259,7 +257,6 @@ class B24Api
                 'status' => '',
                 'scope' => '',
                 'application_token' => '',
-                'code' => ''
             ]);
 
             try {
