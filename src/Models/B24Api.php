@@ -13,13 +13,11 @@ class B24Api extends Model
         'access_token',
         'refresh_token',
         'client_endpoint',
-
         'domain',
         'member_id',
-
         'expires',
         'expires_in',
-
+        'code',
         'user_id',
         'status',
         'scope',

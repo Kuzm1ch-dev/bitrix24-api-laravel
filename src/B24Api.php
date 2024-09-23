@@ -88,11 +88,11 @@ class B24Api
                 'access_token' => htmlspecialchars($request->post('AUTH_ID')),
                 'refresh_token' => htmlspecialchars($request->post('REFRESH_ID')),
                 'client_endpoint' => 'https://' . htmlspecialchars($request->get('DOMAIN')) . '/rest/',
-
+                'code' => htmlspecialchars($request->get('DOMAIN')),
                 'member_id' => $memberId,
                 'domain' => htmlspecialchars($request->get('DOMAIN')),
 
-                'expires' => time() + (int)$request->post('AUTH_EXPIRES') - 600,
+                'expires' => time() + (int) $request->post('AUTH_EXPIRES') - 600,
                 'expires_in' => htmlspecialchars($request->post('AUTH_EXPIRES')),
 
                 'status' => htmlspecialchars($request->post('status')),
@@ -219,7 +219,7 @@ class B24Api
 
                 return true;
             } catch (\Exception $exception) {
-                Log::error((string)$exception);
+                Log::error((string) $exception);
                 return false;
             }
         }
@@ -250,7 +250,7 @@ class B24Api
 
                 'domain' => '',
                 'member_id' => '',
-
+                'code' => '',
                 'expires' => '',
                 'expires_in' => '',
 
@@ -268,7 +268,7 @@ class B24Api
 
                 return true;
             } catch (\Exception $exception) {
-                Log::error((string)$exception);
+                Log::error((string) $exception);
                 return false;
             }
         }
